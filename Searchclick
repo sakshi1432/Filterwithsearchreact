@@ -1,0 +1,110 @@
+import React,{useEffect,useState} from 'react'
+import "./Boo.css";
+
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Float four columns side by side */
+  .column {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+  }
+  
+  /* Remove extra left and right margins, due to padding in columns */
+  .row {margin: 0 -5px;}
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Style the counter cards */
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
+  }
+  
+  /* Responsive columns - one column layout (vertical) on small screens */
+  @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+  //css 
+  
+  
+  //code
+
+ const App = () => {
+   const [dataloop,setDataloop] = useState([]);
+   const [data,setdata] = useState("");
+  useEffect(()=>{
+        const start =  async () =>{
+            let url = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
+            const response = await fetch(url);
+            const resjson = await response.json();
+            setDataloop(resjson);
+
+        }
+        start();
+  },[]);
+
+  const se = () =>{
+    
+    console.log(data);
+    const n = dataloop.filter((elem) =>{
+          return elem.name === data;
+    })
+      setDataloop(n);
+      console.log(dataloop)
+    }
+  return (
+    <div>
+          <h3>hellow baby swtie</h3>
+          <div className = "sea">
+              <input type = "text" placeholder = "Search product" value = {data} onChange= {(e)=>setdata(e.target.value)}></input>
+            <button onClick = {()=>se()} > <i class="far fa-dizzy"></i> </button>
+          </div>
+            
+      {   dataloop.map((elem,i) =>{
+        return (
+          <div class="column">
+                <div class="card " key ={i}>
+                   <img src= {elem.image_link} class="card-img-top" alt="..."/>
+                  <div class="card-body">
+                    <h5 class="card-title">{elem.name}</h5>
+                      
+                   </div>
+                     <ul class="list-group list-group-flush">
+                         <li class="list-group-item">Rs{elem.price}</li>
+                     </ul>
+                  <div class="card-body">
+                    <a href="#" class="card-link">{elem.product_link}</a>
+                    <a href="#" class="card-link">{elem.website_link}</a>
+                   </div>
+                 </div>
+                </div>
+             
+        
+      )})}
+      
+       
+       </div>
+      
+  
+  )
+}
+
+export default App
